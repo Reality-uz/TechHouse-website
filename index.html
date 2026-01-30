@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHouse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="website icon" type="png" href="website icon.jpg">
+</head>
+<body>
+    <div class="intro-screen">
+        <div class="intro-logo">
+            <img src="website icon.jpg"> Tech House 
+        </div>
+    </div>
+
+    <header>
+        <div class="top-nav">
+            <div class="logo-container">
+                <div class="logo"><img src="website icon.jpg" alt="Tech House Logo"> Tech House</div>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+                <span class="search-icon"><i class="fas fa-search"></i></span>
+            </div>
+            <div class="top-nav-actions">
+                <button class="icon-btn" onclick="openProfile()"><i class="fas fa-user"></i></button>
+                <button class="icon-btn" onclick="openCart()">
+                    <i class="fas fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+        <div class="bottom-nav">
+            <ul class="nav-links">
+                <li><a onclick="showHomePage()">Home</a></li>
+                <li class="dropdown" id="categoryDropdown">
+                    <a>Categories <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a onclick="filterCategory('all'); scrollToProducts()">All Products</a>
+                        <a onclick="filterCategory('kitchen'); scrollToProducts()">Kitchen Appliances</a>
+                        <a onclick="filterCategory('cleaning'); scrollToProducts()">Cleaning Appliances</a>
+                        <a onclick="filterCategory('climate'); scrollToProducts()">Heating & Cooling</a>
+                        <a onclick="filterCategory('personal'); scrollToProducts()">Personal Care</a>
+                    </div>
+                </li>
+                <li><a onclick="showAllProducts()">Shop</a></li>
+                <li><a onclick="openMembership()">Membership</a></li>
+                <li><a href="#footer-contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="homePage">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Smart Home Appliances</h1>
+                <p>Transform your living space with cutting-edge technology</p>
+                <button class="btn-primary" onclick="showAllProducts()">Shop Now</button>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="section-header">
+                <h2 class="section-title">Hot Deals</h2>
+            </div>
+            <div class="products-scroll-container">
+                <button class="scroll-btn left" onclick="scrollProducts('deals', -1)"><i class="fas fa-chevron-left"></i></button>
+                <div class="products-scroll" id="hotDeals"></div>
+                <button class="scroll-btn right" onclick="scrollProducts('deals', 1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="section-header">
+                <h2 class="section-title">All Products</h2>
+                <button class="view-all-btn" onclick="showAllProducts()">View All</button>
+            </div>
+            <div class="products-scroll-container">
+                <button class="scroll-btn left" onclick="scrollProducts('all', -1)"><i class="fas fa-chevron-left"></i></button>
+                <div class="products-scroll" id="allProductsScroll"></div>
+                <button class="scroll-btn right" onclick="scrollProducts('all', 1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <section class="container why-choose">
+            <h2 class="section-title">Why Choose Us?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <div class="feature-title">Free Shipping</div>
+                    <div class="feature-text">On all orders over $100</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feature-title">Secure Payment</div>
+                    <div class="feature-text">100% secure transactions</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <div class="feature-title">24/7 Support</div>
+                    <div class="feature-text">Expert customer service</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-undo"></i></div>
+                    <div class="feature-title">Easy Returns</div>
+                    <div class="feature-text">30-day return policy</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container testimonials">
+            <h2 class="section-title">Customer Reviews</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">Sarah Johnson</span>
+                        <span class="testimonial-stars">★★★★★</span>
+                    </div>
+                    <p class="testimonial-text">" Excellent quality and fast delivery. The smart vacuum changed my cleaning routine completely! "</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">Michael Chen</span>
+                        <span class="testimonial-stars">★★★★★</span>
+                    </div>
+                    <p class="testimonial-text">" Great customer service and amazing products. Highly recommend Tech House! "</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <span class="testimonial-name">Emily Rodriguez</span>
+                        <span class="testimonial-stars">★★★★★</span>
+                    </div>
+                    <p class="testimonial-text">" Love my new air purifier! The membership benefits are also fantastic. "</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container faq">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    What is your shipping policy?
+                    <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We offer free shipping on all orders over $100. Orders under $100 have a flat shipping rate of $9.99. Most orders are delivered within 3-5 business days.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    Do you offer warranties?
+                    <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! All our products come with a manufacturer's warranty. The duration varies by product, typically ranging from 1-3 years.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    What are the membership benefits?
+                    <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Members get exclusive discounts, early access to sales, free premium shipping, and extended warranty coverage. Check our membership page for more details!
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="allProductsPage" class="all-products-page">
+        <section class="container">
+            <h2 class="section-title">All Products</h2>
+            <div class="products-layout">
+                <aside class="filters-sidebar">
+                    <div class="filter-section">
+                        <h3>Categories</h3>
+                        <label class="filter-option">
+                            <input type="checkbox" onchange="applyFilters()" data-filter="all" checked> All
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" onchange="applyFilters()" data-filter="kitchen"> Kitchen
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" onchange="applyFilters()" data-filter="cleaning"> Cleaning
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" onchange="applyFilters()" data-filter="climate"> Climate
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" onchange="applyFilters()" data-filter="personal"> Personal Care
+                        </label>
+                    </div>
+                    <div class="filter-section">
+                        <h3>Price Range</h3>
+                        <div class="price-filter-options">
+                            <label class="filter-option">
+                                <input type="radio" name="priceRange" value="all" onchange="applyFilters()" checked> All Prices
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="priceRange" value="0-100" onchange="applyFilters()"> $0 - $100
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="priceRange" value="100-200" onchange="applyFilters()"> $100 - $200
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="priceRange" value="200-300" onchange="applyFilters()"> $200 - $300
+                            </label>
+                            <label class="filter-option">
+                                <input type="radio" name="priceRange" value="300+" onchange="applyFilters()"> $300+
+                            </label>
+                        </div>
+                    </div>
+                </aside>
+                <div class="products" id="allProductsGrid"></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="productDetailPage" class="product-detail-page">
+        <div class="product-detail-container">
+            <button class="back-button" onclick="closeProductDetail()">
+                <i class="fas fa-arrow-left"></i> Back to Shop
+            </button>
+            <div id="productDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2><i class="fas fa-shopping-cart"></i> Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div style="margin-top: 2rem;">
+                <h3 style="color: white; margin-bottom: 1rem;">Total: $<span id="cartTotal">0</span></h3>
+                
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="paymentMethod">
+                        <option value="">Select payment method</option>
+                        <option value="credit">Credit Card</option>
+                        <option value="debit">Debit Card</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="crypto">Cryptocurrency</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Delivery Option</label>
+                    <select id="deliveryOption">
+                        <option value="">Select delivery option</option>
+                        <option value="home">Home Delivery</option>
+                        <option value="store">Pick up from Store</option>
+                        <option value="express">Express Delivery</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProfile()">&times;</span>
+            <div id="authSelection" class="auth-selection">
+                <button class="auth-option-btn active" onclick="switchAuth('login')">Login</button>
+                <button class="auth-option-btn" style="padding-right: 20px;" onclick="switchAuth('register')">Register</button>
+            </div>
+            <div id="loginForm">
+                <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <button class="btn-primary" style="width: 100%;" onclick="login()">Login</button>
+            </div>
+            <div id="registerForm" style="display: none;">  
+                <h2><i class="fas fa-user-plus"></i> Register</h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Create a password">
+                </div>
+                <button class="btn-primary" style="width: 100%;" onclick="register()">Register</button>
+            </div>
+            <div id="profileInfo" style="display: none;">
+                <h2><i class="fas fa-user-circle"></i> Profile</h2>
+                <div style="color: white; margin-bottom: 2rem;">
+                    <p style="margin-bottom: 1rem;"><strong>Name:</strong> <span id="profileName"></span></p>
+                    <p style="margin-bottom: 1rem;"><strong>Email:</strong> <span id="profileEmail"></span></p>
+                    <p style="margin-bottom: 1rem;"><strong>Member Since:</strong> <span id="profileDate"></span></p>
+                </div>
+                <div class="form-group">
+                    <label>Change Username</label>
+                    <input type="text" id="newUsername" placeholder="Enter new username">
+                    <button class="btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="changeUsername()">Update Username</button>
+                </div>
+                <div class="form-group">
+                    <label>Change Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password">
+                    <button class="btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="changePassword()">Update Password</button>
+                </div>
+                <button class="btn-primary" style="width: 100%;" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeContact()">&times;</span>
+            <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="contactName" placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="contactEmail" placeholder="Your email">
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+                <select id="contactSubject">
+                    <option value="">Select a subject</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="support">Product Support</option>
+                    <option value="complaint">Complaint</option>
+                    <option value="feedback">Feedback</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea id="contactMessage" rows="5" placeholder="Your message"></textarea>
+            </div>
+            <button class="btn-primary" style="width: 100%;" onclick="sendMessage()">Send Message</button>
+        </div>
+    </div>
+
+    <!-- Membership Modal -->
+    <div id="membershipModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <span class="close" onclick="closeMembership()">&times;</span>
+            <h2><i class="fas fa-crown"></i> Membership Plans</h2>
+            <div class="membership-plans-modal">
+                <div class="plan-card bronze">
+                    <h3><i class="fas fa-medal"></i> Bronze</h3>
+                    <p style="font-size: 2rem; font-weight: 700;">$9.99/mo</p>
+                    <p>5% discount on all products</p>
+                    <p>Free standard shipping</p>
+                    <p>Priority customer support</p>
+                    <button class="btn-primary" onclick="selectMembershipPlan('Bronze', 9.99)">Choose Plan</button>
+                </div>
+                <div class="plan-card silver">
+                    <h3><i class="fas fa-medal"></i> Silver</h3>
+                    <p style="font-size: 2rem; font-weight: 700;">$19.99/mo</p>
+                    <p>10% discount on all products</p>
+                    <p>Free express shipping</p>
+                    <p>Extended warranty coverage</p>
+                    <p>Early access to sales</p>
+                    <button class="btn-primary" onclick="selectMembershipPlan('Silver', 19.99)">Choose Plan</button>
+                </div>
+                <div class="plan-card gold">
+                    <h3><i class="fas fa-crown"></i> Gold</h3>
+                    <p style="font-size: 2rem; font-weight: 700;">$29.99/mo</p>
+                    <p>15% discount on all products</p>
+                    <p>Free premium shipping</p>
+                    <p>Lifetime warranty on select items</p>
+                    <p>Exclusive product access</p>
+                    <p>Personal shopping assistant</p>
+                    <button class="btn-primary" onclick="selectMembershipPlan('Gold', 29.99)">Choose Plan</button>
+                </div>
+                <div class="plan-card business">
+                    <h3><i class="fas fa-briefcase"></i> Business</h3>
+                    <p style="font-size: 2rem; font-weight: 700;">Custom</p>
+                    <p>Bulk order discounts</p>
+                    <p>Dedicated account manager</p>
+                    <p>Custom invoicing</p>
+                    <p>Volume pricing</p>
+                    <p>Business analytics</p>
+                    <button class="btn-primary" onclick="selectMembershipPlan('Business', 'custom')">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Membership Payment Modal -->
+    <div id="membershipPaymentModal" class="modal membership-payment-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMembershipPayment()">&times;</span>
+            <h2><i class="fas fa-credit-card"></i> Complete Your Membership</h2>
+            <div class="selected-plan-info">
+                <h4>Selected Plan: <span id="selectedPlanName"></span></h4>
+                <p>Price: $<span id="selectedPlanPrice"></span>/month</p>
+            </div>
+            <div class="payment-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="membershipName" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="membershipEmail" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="membershipPhone" placeholder="+1 (555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label>Credit Card Number</label>
+                    <input type="text" id="membershipCard" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="text" id="membershipExpiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" id="membershipCVV" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Billing Address</label>
+                    <input type="text" id="membershipAddress" placeholder="123 Main St, City, State, ZIP">
+                </div>
+                <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="completeMembership()">
+                    <i class="fas fa-check"></i> Complete Purchase
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer-contact">
+        <div class="footer-content">
+            <div>
+                <h4>About Tech House</h4>
+                <p>Your trusted source for innovative home appliances and smart technology.<br> Our team is working hard to bring you the best products to enhance your living space.<br> With over 5 years experience in the market.
+                </p>
+            </div>
+            <div>
+                <h4>Customer Service</h4>
+                <p>Email: <a href="developerabdusalomjon@gmail.com" style="color: white; text-decoration: none;">developerabdusalomjon@gmail.com</a></p>
+                <p>Phone: <a href="+998 (90) 509 09 80" style="color: white; text-decoration: none;">+998 (90) 509 09 80</a></p>
+                <p>Hours: 24/7</p>
+            </div>
+            <div>
+                <h4>Follow Us</h4>
+                <p><a href="https://facebook.com" style="text-decoration: none;"><i class="fab fa-facebook"></i>  Facebook</a></p>
+                <p><a href="https://x.com" style="text-decoration: none;"><i class="fab fa-twitter"></i>  X (twitter)</a></p>
+                <p><a href="https://www.instagram.com" style="text-decoration: none;"><i class="fab fa-instagram"></i>  Instagram</a></p>
+                <p><a href="https://web.telegram.org" style="text-decoration: none;"><i class="fab fa-telegram"></i>  Telegram</a></p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <p><a href="#" style="color: rgba(255, 255, 255, 0.7);">Privacy Policy</a></p>
+                <p><a href="#" style="color: rgba(255, 255, 255, 0.7);">Terms of Service</a></p>
+                <p><a href="#" style="color: rgba(255, 255, 255, 0.7);">Shipping Info</a></p>
+            </div>
+        </div>
+
+        <div class="footer-contact-section">
+            <h3><i class="fas fa-envelope"></i> Contact Us</h3>
+            <div class="footer-contact-form">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="footerContactName" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="footerContactEmail" placeholder="Your email">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="footerContactPhone" placeholder="Your phone number">
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <select id="footerContactSubject">
+                        <option value="">Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="support">Product Support</option>
+                        <option value="complaint">Complaint</option>
+                        <option value="feedback">Feedback</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label>Message</label>
+                    <textarea id="footerContactMessage" rows="4" placeholder="Your message"></textarea>
+                </div>
+                <button class="btn-primary" onclick="sendFooterMessage()">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5);">
+            © 2026 Tech House. Akmalov Abdusalomjon.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
