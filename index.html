@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechHouse</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="website icon" type="png" href="website icon.jpg">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="intro-screen">
@@ -18,10 +18,10 @@
     <header>
         <div class="top-nav">
             <div class="logo-container">
-                <div class="logo"><img src="website icon.jpg" alt="Tech House Logo"> Tech House</div>
+                <div class="logo"><img src="website icon.jpg"> Tech House</div>
             </div>
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+                <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchProducts()">
                 <span class="search-icon"><i class="fas fa-search"></i></span>
             </div>
             <div class="top-nav-actions">
@@ -35,18 +35,40 @@
             <ul class="nav-links">
                 <li><a onclick="showHomePage()">Home</a></li>
                 <li class="dropdown" id="categoryDropdown">
-                    <a>Categories <i class="fas fa-chevron-down"></i></a>
+                    <a>Categories <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 5px;"></i></a>
                     <div class="dropdown-content">
-                        <a onclick="filterCategory('all'); scrollToProducts()">All Products</a>
-                        <a onclick="filterCategory('kitchen'); scrollToProducts()">Kitchen Appliances</a>
-                        <a onclick="filterCategory('cleaning'); scrollToProducts()">Cleaning Appliances</a>
-                        <a onclick="filterCategory('climate'); scrollToProducts()">Heating & Cooling</a>
-                        <a onclick="filterCategory('personal'); scrollToProducts()">Personal Care</a>
+                        <div class="mega-col">
+                            <h3 onclick="filterCategory('kitchen')">Kitchen</h3>
+                            <a class="mega-item" onmouseover="updateMenuPreview(1)" onclick="openProductDetail(1)">Smart Coffee Maker</a>
+                            <a class="mega-item" onmouseover="updateMenuPreview(5)" onclick="openProductDetail(5)">Smart Blender</a>
+                            <a class="mega-item" onmouseover="updateMenuPreview(11)" onclick="openProductDetail(11)">Espresso Machine</a>
+                        </div>
+                        <div class="mega-col">
+                            <h3 onclick="filterCategory('cleaning')">Cleaning</h3>
+                            <a class="mega-item" onmouseover="updateMenuPreview(2)" onclick="openProductDetail(2)">Robot Vacuum</a>
+                            <a class="mega-item" onmouseover="updateMenuPreview(6)" onclick="openProductDetail(6)">Steam Mop</a>
+                        </div>
+                        <div class="mega-col">
+                            <h3 onclick="filterCategory('climate')">Climate</h3>
+                            <a class="mega-item" onmouseover="updateMenuPreview(3)" onclick="openProductDetail(3); scrollToProducts()">Air Purifier Pro</a>
+                            <a class="mega-item" onmouseover="updateMenuPreview(7)" onclick="openProductDetail(7); scrollToProducts()">Smart Thermostat</a>
+                            <a class="mega-item" onmouseover="updateMenuPreview(13)" onclick="openProductDetail(13); scrollToProducts()">Humidifier</a>
+                        </div>
+                        <div class="mega-col">
+                            <h3 onclick="filterCategory('personal')">Personal Care</h3>
+                            <a class="mega-item" onmouseover="updateMenuPreview(4)" onclick="openProductDetail(4); scrollToProducts()">Hair Dryer</a>
+                            <a class="mega-item" onmouseover="updateMenuPreview(8)" onclick="openProductDetail(8); scrollToProducts()">Electric Toothbrush</a>
+                            <a class="mega-item" onmouseover="updateMenuPreview(14)" onclick="openProductDetail(14); scrollToProducts()">Electric Shaver</a>
+                        </div>
+                        <div class="mega-preview">
+                            <img id="menuPreviewImg" src="https://www.coffeeness.de/wp-content/uploads/2024/04/atomi-smart-wifi-coffee-maker-main.jpg" alt="Preview">
+                            <div id="menuPreviewTitle">Hover over a product</div>
+                        </div>
                     </div>
                 </li>
                 <li><a onclick="showAllProducts()">Shop</a></li>
                 <li><a onclick="openMembership()">Membership</a></li>
-                <li><a href="#footer-contact">Contact</a></li>
+                <li><a onclick="showContactPage()">Contact</a></li>
             </ul>
         </div>
     </header>
@@ -54,15 +76,15 @@
     <div id="homePage">
         <section class="hero">
             <div class="hero-content">
-                <h1>Smart Home Appliances</h1>
-                <p>Transform your living space with cutting-edge technology</p>
+                <h1>Smart Home. Simple Life</h1>
+                <p>High-quality appliances for the modern home</p>
                 <button class="btn-primary" onclick="showAllProducts()">Shop Now</button>
             </div>
         </section>
 
         <section class="container">
             <div class="section-header">
-                <h2 class="section-title">Hot Deals</h2>
+                <h2 class="section-title" style="text-align: center;"> Hot Deals</h2>
             </div>
             <div class="products-scroll-container">
                 <button class="scroll-btn left" onclick="scrollProducts('deals', -1)"><i class="fas fa-chevron-left"></i></button>
@@ -84,7 +106,7 @@
         </section>
 
         <section class="container why-choose">
-            <h2 class="section-title">Why Choose Us?</h2>
+            <h2 class="section-title" style="text-align: center;">Why Choose Us?</h2>
             <div class="features-grid">
                 <div class="feature-item">
                     <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
@@ -110,7 +132,7 @@
         </section>
 
         <section class="container testimonials">
-            <h2 class="section-title">Customer Reviews</h2>
+            <h2 class="section-title" style="text-align: center;">Customer Reviews</h2>
             <div class="testimonial-grid">
                 <div class="testimonial-card">
                     <div class="testimonial-header">
@@ -137,7 +159,7 @@
         </section>
 
         <section class="container faq">
-            <h2 class="section-title">Frequently Asked Questions</h2>
+            <h2 class="section-title" style="text-align: center;">Frequently Asked Questions</h2>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFAQ(this)">
                     What is your shipping policy?
@@ -172,11 +194,33 @@
                 </div>
             </div>
         </section>
+
+        <section class="container store-locations">
+            <h2 class="section-title" style="text-align: center;">Visit Our Stores</h2>
+            <div class="features-grid">
+                <div class="feature-loc">
+                    <div class="feature-icon"><i class="fas fa-store"></i></div>
+                    <div class="feature-title">Tashkent City Mall Branch</div>
+                    <div class="feature-text">
+                        <p>12 Shaykhantakhur St, Tashkent</p>
+                        <p><strong>Hours:</strong> Mon-Sun: 10:00 AM - 10:00 PM</p>
+                    </div>
+                </div>
+                <div class="feature-loc">
+                    <div class="feature-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="feature-title">Chilanzar Tech Hub</div>
+                    <div class="feature-text">
+                        <p>Bunyodkor Avenue, Block 5</p>
+                        <p><strong>Hours:</strong> Mon-Sat: 09:00 AM - 08:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <div id="allProductsPage" class="all-products-page">
         <section class="container">
-            <h2 class="section-title">All Products</h2>
+            <h2 class="section-title" style="text-align: center;">All Products</h2>
             <div class="products-layout">
                 <aside class="filters-sidebar">
                     <div class="filter-section">
@@ -226,7 +270,7 @@
     <div id="productDetailPage" class="product-detail-page">
         <div class="product-detail-container">
             <button class="back-button" onclick="closeProductDetail()">
-                <i class="fas fa-arrow-left"></i> Back to Shop
+                <i class="fas fa-arrow-left"></i>
             </button>
             <div id="productDetailContent"></div>
         </div>
@@ -242,6 +286,15 @@
                 <h3 style="color: white; margin-bottom: 1rem;">Total: $<span id="cartTotal">0</span></h3>
                 
                 <div class="form-group">
+                    <label>Delivery Option</label>
+                    <select id="deliveryOption">
+                        <option value="">Select delivery option</option>
+                        <option value="home">Home Delivery</option>
+                        <option value="store">Pick up from Store</option>
+                        <option value="express">Express Delivery</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Payment Method</label>
                     <select id="paymentMethod">
                         <option value="">Select payment method</option>
@@ -252,14 +305,13 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Delivery Option</label>
-                    <select id="deliveryOption">
-                        <option value="">Select delivery option</option>
-                        <option value="home">Home Delivery</option>
-                        <option value="store">Pick up from Store</option>
-                        <option value="express">Express Delivery</option>
-                    </select>
+                <div id="cardDetailsForm" style="display:none; margin-top: 1rem; border: 1px solid #ff9a00; padding: 10px;border-radius: 10px;">
+                    <label style="color:white;">Card Number</label>
+                    <input type="text" placeholder="XXXX XXXX XXXX XXXX" style="width:100%; margin-bottom: 10px;">
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" placeholder="MM/YY">
+                        <input type="text" placeholder="CVV">
+                    </div>
                 </div>
 
                 <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()">Checkout</button>
@@ -301,26 +353,35 @@
                     <label>Password</label>
                     <input type="password" id="registerPassword" placeholder="Create a password">
                 </div>
+                <div class="form-group">
+                    <label>Your Location</label>
+                    <input type="text" id="registerLocation" placeholder="Enter your city/address">
+                </div>
                 <button class="btn-primary" style="width: 100%;" onclick="register()">Register</button>
             </div>
+            
             <div id="profileInfo" style="display: none;">
                 <h2><i class="fas fa-user-circle"></i> Profile</h2>
-                <div style="color: white; margin-bottom: 2rem;">
-                    <p style="margin-bottom: 1rem;"><strong>Name:</strong> <span id="profileName"></span></p>
-                    <p style="margin-bottom: 1rem;"><strong>Email:</strong> <span id="profileEmail"></span></p>
-                    <p style="margin-bottom: 1rem;"><strong>Member Since:</strong> <span id="profileDate"></span></p>
+                <div style="color: white; margin-bottom: 2rem; border-bottom: 1px solid #444; padding-bottom: 1rem;">
+                    <p style="margin: 10px 0;">
+                        <strong>Name:</strong> <span id="profileNameDisplay"></span> 
+                        <i class="fas fa-pen" onclick="editField('name')" style="color: #ff9a00; cursor: pointer; margin-left: 10px; font-size: 0.8rem;"></i>
+                    </p>
+                    <p style="margin: 10px 0;">
+                        <strong>Email:</strong> <span id="profileEmailDisplay"></span> 
+                        <i class="fas fa-pen" onclick="editField('email')" style="color: #ff9a00; cursor: pointer; margin-left: 10px; font-size: 0.8rem;"></i>
+                    </p>
+                    <p style="margin: 10px 0;">
+                        <strong>Password:</strong> <span id="profilePassDisplay">••••••••</span> 
+                        <i class="fas fa-pen" onclick="editField('password')" style="color: #ff9a00; cursor: pointer; margin-left: 10px; font-size: 0.8rem;"></i>
+                    </p>
+                    <p style="margin: 10px 0;"><strong>Member Since:</strong> <span id="profileDateDisplay"></span></p>
                 </div>
-                <div class="form-group">
-                    <label>Change Username</label>
-                    <input type="text" id="newUsername" placeholder="Enter new username">
-                    <button class="btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="changeUsername()">Update Username</button>
-                </div>
-                <div class="form-group">
-                    <label>Change Password</label>
-                    <input type="password" id="newPassword" placeholder="Enter new password">
-                    <button class="btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="changePassword()">Update Password</button>
-                </div>
-                <button class="btn-primary" style="width: 100%;" onclick="logout()">Logout</button>
+
+                <h3>Order History</h3>
+                <div id="orderHistoryContainer" style="max-height: 250px; overflow-y: auto; margin-top: 1rem; color: white; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px;"></div>
+                
+                <button class="btn-primary" style="width: 100%; margin-top: 2rem;" onclick="logout()">Logout</button>
             </div>
         </div>
     </div>
@@ -363,16 +424,16 @@
             <h2><i class="fas fa-crown"></i> Membership Plans</h2>
             <div class="membership-plans-modal">
                 <div class="plan-card bronze">
-                    <h3><i class="fas fa-medal"></i> Bronze</h3>
-                    <p style="font-size: 2rem; font-weight: 700;">$9.99/mo</p>
+                    <h4><i class="fas fa-medal"></i> Bronze</h4>
+                    <p style="font-size: 1.5rem; font-weight: 700;">$9.99/mo</p>
                     <p>5% discount on all products</p>
                     <p>Free standard shipping</p>
                     <p>Priority customer support</p>
                     <button class="btn-primary" onclick="selectMembershipPlan('Bronze', 9.99)">Choose Plan</button>
                 </div>
                 <div class="plan-card silver">
-                    <h3><i class="fas fa-medal"></i> Silver</h3>
-                    <p style="font-size: 2rem; font-weight: 700;">$19.99/mo</p>
+                    <h4><i class="fas fa-medal"></i> Silver</h4>
+                    <p style="font-size: 1.5rem; font-weight: 700;">$19.99/mo</p>
                     <p>10% discount on all products</p>
                     <p>Free express shipping</p>
                     <p>Extended warranty coverage</p>
@@ -380,8 +441,8 @@
                     <button class="btn-primary" onclick="selectMembershipPlan('Silver', 19.99)">Choose Plan</button>
                 </div>
                 <div class="plan-card gold">
-                    <h3><i class="fas fa-crown"></i> Gold</h3>
-                    <p style="font-size: 2rem; font-weight: 700;">$29.99/mo</p>
+                    <h4><i class="fas fa-crown"></i> Gold</h4>
+                    <p style="font-size: 1.5rem; font-weight: 700;">$29.99/mo</p>
                     <p>15% discount on all products</p>
                     <p>Free premium shipping</p>
                     <p>Lifetime warranty on select items</p>
@@ -390,8 +451,8 @@
                     <button class="btn-primary" onclick="selectMembershipPlan('Gold', 29.99)">Choose Plan</button>
                 </div>
                 <div class="plan-card business">
-                    <h3><i class="fas fa-briefcase"></i> Business</h3>
-                    <p style="font-size: 2rem; font-weight: 700;">Custom</p>
+                    <h4><i class="fas fa-briefcase"></i> Business</h4>
+                    <p style="font-size: 1.5rem; font-weight: 700;">Custom</p>
                     <p>Bulk order discounts</p>
                     <p>Dedicated account manager</p>
                     <p>Custom invoicing</p>
@@ -450,7 +511,66 @@
         </div>
     </div>
 
+    <div id="comparisonModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <span class="close" onclick="closeComparison()">&times;</span>
+            <h2><i class="fas fa-balance-scale"></i> Product Comparison</h2>
+            <div id="comparisonTableContainer" style="overflow-x: auto;"></div>
+        </div>
+    </div>
+    <div id="compareFloatingBtn" style="display:none; position:fixed; bottom:20px; right:20px; z-index:999;">
+        <button class="btn-primary" onclick="openComparison()">Compare (<span id="compareCount">0</span>)</button>
+    </div>
+
     <footer id="footer-contact">
+        <div id="contactPage">
+            <section class="container store-locations" style="margin-top: -100px;">
+                <h2 class="section-title">Visit Our Stores</h2>
+                <div class="features-grid">
+                    <div class="feature-loc">
+                        <div class="feature-icon"><i class="fas fa-store"></i></div>
+                        <div class="feature-title">Tashkent City Mall Branch</div>
+                        <div class="feature-text">
+                            <p>
+                                <a href="https://www.google.com/maps/place/12+STOREEZ/@41.3157548,69.2528109,18.67z/data=!4m6!3m5!1s0x38ae8b007bb374d9:0x3a774c1bca966219!8m2!3d41.3162155!4d69.2525756!16s%2Fg%2F11w35rpgb3?entry=ttu&g_ep=EgoyMDI2MDEyOC4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D" 
+                                target="_blank" style="color: #ff9a00; text-decoration: underline;">
+                                Batir Zakirov Street 7, Tashkent</a>
+                            <p><strong>Hours:</strong> Mon-Sun: 10:00 AM - 10:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="feature-loc">
+                        <div class="feature-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="feature-title">Chilanzar Tech Hub</div>
+                        <div class="feature-text">
+                            <p><a href="https://www.google.com/maps/search/?api=1&query=Bunyodkor+Avenue+Tashkent" 
+                                target="_blank" style="color: #ff9a00; text-decoration: underline;">Bunyodkor Avenue, Block 5</a>
+                            </p>
+                            <p><strong>Hours:</strong> Mon-Sat: 09:00 AM - 08:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="footer-contact-section">
+                <h3><i class="fas fa-envelope"></i> Contact Us</h3>
+                <div class="footer-contact-form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="footerContactName" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="footerContactEmail" placeholder="Your email">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Message</label>
+                        <textarea id="footerContactMessage" rows="4" placeholder="Your message"></textarea>
+                    </div>
+                    <button class="btn-primary" onclick="sendFooterMessage()" style="margin-bottom: 100px;">Send Message</button>
+                </div>
+            </div>
+        </div>
+                
         <div class="footer-content">
             <div>
                 <h4>About Tech House</h4>
@@ -475,41 +595,6 @@
                 <p><a href="#" style="color: rgba(255, 255, 255, 0.7);">Privacy Policy</a></p>
                 <p><a href="#" style="color: rgba(255, 255, 255, 0.7);">Terms of Service</a></p>
                 <p><a href="#" style="color: rgba(255, 255, 255, 0.7);">Shipping Info</a></p>
-            </div>
-        </div>
-
-        <div class="footer-contact-section">
-            <h3><i class="fas fa-envelope"></i> Contact Us</h3>
-            <div class="footer-contact-form">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" id="footerContactName" placeholder="Your name">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="footerContactEmail" placeholder="Your email">
-                </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" id="footerContactPhone" placeholder="Your phone number">
-                </div>
-                <div class="form-group">
-                    <label>Subject</label>
-                    <select id="footerContactSubject">
-                        <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="support">Product Support</option>
-                        <option value="complaint">Complaint</option>
-                        <option value="feedback">Feedback</option>
-                    </select>
-                </div>
-                <div class="form-group full-width">
-                    <label>Message</label>
-                    <textarea id="footerContactMessage" rows="4" placeholder="Your message"></textarea>
-                </div>
-                <button class="btn-primary" onclick="sendFooterMessage()">
-                    <i class="fas fa-paper-plane"></i> Send Message
-                </button>
             </div>
         </div>
 
