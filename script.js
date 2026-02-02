@@ -1,5 +1,4 @@
-
-            const products = [
+        const products = [
             {
                 id: 1,
                 name: "Smart Coffee Maker",
@@ -16,7 +15,7 @@
                 sale: true,
                 rating: 4.5,
                 inStock: true,
-                description: "Wake up to the perfect cup of coffee every morning with our Smart Coffee Maker. Features programmable brewing, temperature control, and smartphone connectivity for ultimate convenience.",
+                description: "Wake up to the perfect cup of coffee every morning with our Smart Coffee Maker. Features programmable brewing, temperature control and smartphone connectivity for ultimate convenience.",
                 features: [
                     "Programmable 24-hour timer",
                     "Built-in grinder for fresh coffee",
@@ -150,7 +149,7 @@
                 images: ["https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1727136267-61ubGWvXmCL.jpg?crop=1xw:1.00xh;center,top&resize=980:*" , "https://cdn.shopify.com/s/files/1/2781/4384/products/Home-lifestyle-image3_619d612d-1bb8-49d4-9c1e-24c1c6dbb353.jpg?v=1654716006&width=696"],
                 sale: false,
                 rating: 4.4,
-                inStock: false,
+                inStock: true,
                 description: "Chemical-free cleaning with powerful steam technology.",
                 features: ["Ready in 30 seconds", "Swivel steering", "Reusable pads", "Multi-surface"],
                 specs: { "Water Tank": "350ml", "Steam Time": "20 minutes", "Warranty": "1 year" },
@@ -321,7 +320,21 @@
             });
         }
 
-
+        function updateMenuPreview(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                const imgElement = document.getElementById('menuPreviewImg');
+                const titleElement = document.getElementById('menuPreviewTitle');
+                
+                // Fade effect
+                imgElement.style.opacity = '0';
+                setTimeout(() => {
+                    imgElement.src = product.image;
+                    titleElement.textContent = product.name;
+                    imgElement.style.opacity = '1';
+                }, 150);
+            }
+        }
 
 function createProductCard(product) {
     const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
@@ -337,6 +350,9 @@ function createProductCard(product) {
                 ${product.originalPrice ? `<span class="original-price">$${product.originalPrice}</span>` : ''}
                 $${product.price}
             </div>
+            <label class="filter-option" onclick="event.stopPropagation()" style="margin-bottom: 10px; display: block;">
+                <input type="checkbox" class="compare-checkbox" data-id="${product.id}" onchange="toggleCompare(${product.id})"> Compare
+            </label>
             <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">
                 <i class="fas fa-cart-plus"></i> Add to Cart
             </button>
@@ -423,12 +439,8 @@ function openProductDetail(productId) {
     `;
     
     document.getElementById('productDetailContent').innerHTML = detailContent;
-    
-    // Hide both home page and all products page
     document.getElementById('homePage').style.display = 'none';
     document.getElementById('allProductsPage').classList.remove('active');
-    
-    // Show product detail page
     document.getElementById('productDetailPage').classList.add('active');
     
     window.scrollTo(0, 0);
@@ -452,20 +464,13 @@ function closeProductDetail() {
     } else {
         document.getElementById('homePage').style.display = 'block';
     }
-    
     window.scrollTo(0, 0);
 }
 
-// Show Home Page
-function showHomePage() {
-    document.getElementById('productDetailPage').classList.remove('active');
-    document.getElementById('homePage').style.display = 'block';
-    window.scrollTo(0, 0);
-}
-
-
-
-
+document.getElementById('paymentMethod').addEventListener('change', function() {
+    const cardForm = document.getElementById('cardDetailsForm');
+    cardForm.style.display = (this.value === 'credit' || this.value === 'debit') ? 'block' : 'none';
+});
 
         function scrollProducts(type, direction) {
             const container = type === 'deals' ? 
@@ -502,7 +507,6 @@ function showHomePage() {
                 notification.remove();
             }, 3000);
         }
-
         function updateCartCount() {
             const count = cart.reduce((total, item) => total + item.quantity, 0);
             document.getElementById('cartCount').textContent = count;
@@ -552,12 +556,10 @@ function showHomePage() {
             updateCartCount();
             openCart();
         }
-
         function updateCartTotal() {
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             document.getElementById('cartTotal').textContent = total.toFixed(2);
         }
-
         function closeCart() {
             document.getElementById('cartModal').style.display = 'none';
         }
@@ -565,48 +567,100 @@ function showHomePage() {
         function checkout() {
             const payment = document.getElementById('paymentMethod').value;
             const delivery = document.getElementById('deliveryOption').value;
-            
-            if (!payment) {
-                showNotification('Please select a payment method');
-                return;
-            }
-            
-            if (!delivery) {
-                showNotification('Please select a delivery option');
-                return;
-            }
+            const cartTotal = document.getElementById('cartTotal').textContent;
 
+            if (!currentUser) {
+                showNotification("Please Login or Register to complete your purchase.");
+                openProfile();
+                return;
+            }
             if (cart.length === 0) {
                 showNotification('Your cart is empty');
                 return;
             }
-            
-            showNotification('Order placed successfully! Thank you for shopping with Tech House.');
+            if (!payment || !delivery) {
+                showNotification('Please select both payment and delivery options');
+                return;
+            }
+            const newOrder = {
+                id: Math.floor(Math.random() * 9000) + 1000,
+                date: new Date().toLocaleDateString(),
+                total: cartTotal,
+                itemCount: cart.length
+            };
+            if (!currentUser.orders) {
+                currentUser.orders = [];
+            }
+            currentUser.orders.unshift(newOrder);
+            localStorage.setItem('techHouseUser', JSON.stringify(currentUser));
+            showNotification('Order placed successfully! Thank you for shopping.');
             cart = [];
             updateCartCount();
             closeCart();
+            renderOrderHistory();
+        }
+        function saveOrderToHistory(){
+            const order = {
+                id: Math.floor(Math.random() * 10000),
+                date: new Date().toLocaleDateString(),
+                total: document.getElementById('cartTotal').textContent,
+                items: [...cart]
+            };
+            currentUser.orders.push(order);
+            localStorage.setItem('techHouseUser', JSON.stringify(currentUser));
+            renderOrderHistory();
+        }
+        function renderOrderHistory() {
+            const container = document.getElementById('orderHistoryContainer');
+            if (!currentUser.orders || currentUser.orders.length === 0) {
+                container.innerHTML = '<p style="color: gray; text-align: center;">No orders yet.</p>';
+                return;
+            }
+
+            container.innerHTML = currentUser.orders.map(order => `
+                <div style="border-bottom: 1px solid #444; padding: 12px 0; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: bold;">Order #${order.id}</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">${order.date} • ${order.itemCount} items</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: #ff9a00; font-weight: bold;">$${order.total}</div>
+                        <button onclick="returnItem(${order.id})" style="background: none; border: 1px solid #ff4444; color: #ff4444; border-radius: 5px; font-size: 0.7rem; cursor: pointer; padding: 2px 5px; margin-top: 5px;">Return</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function editField(field) {
+            let newValue = prompt(`Enter new ${field}:`, field === 'password' ? "" : currentUser[field]);
+            if (newValue && newValue.trim() !== "") {
+                currentUser[field] = newValue;
+                localStorage.setItem('techHouseUser', JSON.stringify(currentUser));
+                showNotification(`${field.charAt(0).toUpperCase() + field.slice(1)} updated!`);
+                openProfile(); // Refresh the UI
+            }
+        }
+        function returnItem(orderId) {
+            showNotification("Return request for Order #" + orderId + " has been sent to the store.");
         }
 
         function openProfile() {
             const modal = document.getElementById('profileModal');
-            
             if (currentUser) {
                 document.getElementById('authSelection').style.display = 'none';
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('registerForm').style.display = 'none';
                 document.getElementById('profileInfo').style.display = 'block';
                 
-                document.getElementById('profileName').textContent = currentUser.name;
-                document.getElementById('profileEmail').textContent = currentUser.email;
-                document.getElementById('profileDate').textContent = currentUser.date;
+                document.getElementById('profileNameDisplay').textContent = currentUser.name;
+                document.getElementById('profileEmailDisplay').textContent = currentUser.email;
+                document.getElementById('profileDateDisplay').textContent = currentUser.date || "2026";
+                
+                renderOrderHistory();
             } else {
                 document.getElementById('authSelection').style.display = 'flex';
-                document.getElementById('loginForm').style.display = 'block';
-                document.getElementById('registerForm').style.display = 'none';
                 document.getElementById('profileInfo').style.display = 'none';
                 switchAuth('login');
             }
-            
             modal.style.display = 'block';
         }
 
@@ -637,7 +691,6 @@ function showHomePage() {
                 showNotification('Please fill in all fields');
                 return;
             }
-            
             const savedUser = localStorage.getItem('techHouseUser');
             
             if (savedUser) {
@@ -658,16 +711,18 @@ function showHomePage() {
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
+            const location = document.getElementById('registerLocation').value;
             
             if (!name || !email || !password) {
                 showNotification('Please fill in all fields');
                 return;
             }
-            
             const user = {
                 name: name,
                 email: email,
                 password: password,
+                location: location,
+                orders: [],
                 date: new Date().toLocaleDateString()
             };
             
@@ -677,24 +732,29 @@ function showHomePage() {
             closeProfile();
         }
 
+        function updateLocation() {
+            const newLoc = document.getElementById('newLocation').value;
+            if (newLoc) {
+                currentUser.location = newLoc;
+                localStorage.setItem('techHouseUser', JSON.stringify(currentUser));
+                document.getElementById('profileLocationDisplay').textContent = newLoc;
+                showNotification("Location updated!");
+            }
+        }
         function logout() {
             currentUser = null;
             showNotification('Logged out successfully!');
             closeProfile();
         }
-
         function closeProfile() {
             document.getElementById('profileModal').style.display = 'none';
         }
-
         function openContact() {
             document.getElementById('contactModal').style.display = 'block';
         }
-
         function closeContact() {
             document.getElementById('contactModal').style.display = 'none';
         }
-
         function sendMessage() {
             const name = document.getElementById('contactName').value;
             const email = document.getElementById('contactEmail').value;
@@ -714,15 +774,12 @@ function showHomePage() {
             document.getElementById('contactSubject').value = '';
             document.getElementById('contactMessage').value = '';
         }
-
         function openMembership() {
             document.getElementById('membershipModal').style.display = 'block';
         }
-
         function closeMembership() {
             document.getElementById('membershipModal').style.display = 'none';
         }
-
         function selectMembershipPlan(planName, price) {
             selectedMembershipPlan = { name: planName, price: price };
             
@@ -738,11 +795,9 @@ function showHomePage() {
             closeMembership();
             document.getElementById('membershipPaymentModal').style.display = 'block';
         }
-
         function closeMembershipPayment() {
             document.getElementById('membershipPaymentModal').style.display = 'none';
         }
-
         function completeMembership() {
             const name = document.getElementById('membershipName').value;
             const email = document.getElementById('membershipEmail').value;
@@ -759,8 +814,7 @@ function showHomePage() {
             
             showNotification(`Welcome to ${selectedMembershipPlan.name} Membership! Your account has been activated.`);
             closeMembershipPayment();
-            
-            // Clear form
+        
             document.getElementById('membershipName').value = '';
             document.getElementById('membershipEmail').value = '';
             document.getElementById('membershipPhone').value = '';
@@ -769,35 +823,37 @@ function showHomePage() {
             document.getElementById('membershipCVV').value = '';
             document.getElementById('membershipAddress').value = '';
         }
-
         function showAllProducts() {
+            document.getElementById('contactPage').classList.remove('active');
             document.getElementById('homePage').style.display = 'none';
             document.getElementById('allProductsPage').classList.add('active');
             window.scrollTo(0, 0);
         }
-
         function showHomePage() {
+            document.getElementById('contactPage').classList.remove('active');
+            document.getElementById('productDetailPage').classList.remove('active');
             document.getElementById('homePage').style.display = 'block';
             document.getElementById('allProductsPage').classList.remove('active');
             window.scrollTo(0, 0);
         }
         function filterCategory(category) {
             currentCategory = category;
-            const cards = document.querySelectorAll('.product-card');
-            
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
+            showAllProducts(); 
+
+            const checkboxes = document.querySelectorAll('.filter-section input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (category === 'all') {
+                    cb.checked = (cb.dataset.filter === 'all');
                 } else {
-                    card.style.display = 'none';
+                    cb.checked = (cb.dataset.filter === category);
                 }
             });
-            
-            // Close the dropdown after selection
+            applyFilters();
             const dropdown = document.getElementById('categoryDropdown');
             if (dropdown) {
                 dropdown.classList.remove('active');
             }
+            window.scrollTo(0, 0);
         }
 
         function sendFooterMessage() {
@@ -823,30 +879,23 @@ function showHomePage() {
 
         function applyFilters() {
             const checkedCategories = [];
-            document.querySelectorAll('.filter-option input[type="checkbox"]:checked').forEach(cb => {
+            document.querySelectorAll('.filter-section input[type="checkbox"]:checked').forEach(cb => {
                 checkedCategories.push(cb.dataset.filter);
             });
-            
             const selectedPriceRange = document.querySelector('input[name="priceRange"]:checked')?.value || 'all';
-            
             const cards = document.querySelectorAll('#allProductsGrid .product-card');
-            
             cards.forEach(card => {
-                const priceText = card.querySelector('.product-price').textContent;
-                const priceMatch = priceText.match(/(\d+\.\d+)/g);
-                const price = priceMatch ? parseFloat(priceMatch[priceMatch.length - 1]) : 0;
                 const category = card.dataset.category;
+                const priceText = card.querySelector('.product-price').textContent;
+                const price = parseFloat(priceText.replace('$', ''));
                 
                 let showCard = true;
-                
-                // Category filter
+
                 if (checkedCategories.length > 0 && !checkedCategories.includes('all')) {
                     if (!checkedCategories.includes(category)) {
                         showCard = false;
                     }
                 }
-                
-                // Price filter
                 if (selectedPriceRange !== 'all') {
                     if (selectedPriceRange === '0-100' && price > 100) showCard = false;
                     else if (selectedPriceRange === '100-200' && (price < 100 || price > 200)) showCard = false;
@@ -892,7 +941,6 @@ function showHomePage() {
                 productDetailsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
-
         function toggleFAQ(element) {
             const faqItem = element.parentElement;
             faqItem.classList.toggle('active');
@@ -933,4 +981,113 @@ function showHomePage() {
             });
         }
 
-        renderProducts();
+function showContactPage() {
+    document.getElementById('homePage').style.display = 'none';
+    document.getElementById('allProductsPage').classList.remove('active');
+    document.getElementById('productDetailPage').classList.remove('active');
+    
+    const contactPage = document.getElementById('contactPage');
+    contactPage.classList.add('active');
+    const dropdown = document.getElementById('categoryDropdown');
+    if (dropdown) dropdown.classList.remove('active');
+    
+    window.scrollTo(0, 0);
+}
+
+let compareList = [];
+function toggleCompare(productId) {
+    const index = compareList.indexOf(productId);
+    if (index === -1) {
+        if (compareList.length >= 3) {
+            showNotification("You can only compare up to 3 products.");
+            // Uncheck the checkbox manually
+            event.target.checked = false;
+            return;
+        }
+        compareList.push(productId);
+    } else {
+        compareList.splice(index, 1);
+    }
+    
+    // Update floating button
+    const btn = document.getElementById('compareFloatingBtn');
+    document.getElementById('compareCount').textContent = compareList.length;
+    btn.style.display = compareList.length > 0 ? 'block' : 'none';
+}
+
+function openComparison() {
+    if (compareList.length < 2) {
+        showNotification("Select at least 2 products to compare.");
+        return;
+    }
+
+    const selectedProducts = compareList.map(id => products.find(p => p.id === id));
+    const modal = document.getElementById('comparisonModal');
+    const container = document.getElementById('comparisonTableContainer');
+
+    // Create Table Header with Images and Names
+    let tableHTML = `<table class="comparison-table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">Product</th>
+                ${selectedProducts.map(p => `
+                    <th>
+                        <img src="${p.image}" class="compare-img"><br>
+                        ${p.name}
+                    </th>
+                `).join('')}
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="compare-row-header"><td colspan="${selectedProducts.length + 1}">Pricing & Rating</td></tr>
+            <tr>
+                <td><strong>Price</strong></td>
+                ${selectedProducts.map(p => `<td><span style="color:#ff9a00; font-weight:700;">$${p.price}</span></td>`).join('')}
+            </tr>
+            <tr>
+                <td><strong>Rating</strong></td>
+                ${selectedProducts.map(p => `<td>★ ${p.rating} / 5</td>`).join('')}
+            </tr>
+
+            <tr class="compare-row-header"><td colspan="${selectedProducts.length + 1}">Key Highlights</td></tr>
+            <tr>
+                <td><strong>Top Features</strong></td>
+                ${selectedProducts.map(p => `
+                    <td>
+                        <ul class="compare-feature-list">
+                            ${p.features.slice(0, 4).map(f => `<li>• ${f}</li>`).join('')}
+                        </ul>
+                    </td>
+                `).join('')}
+            </tr>
+
+            <tr class="compare-row-header"><td colspan="${selectedProducts.length + 1}">Technical Details</td></tr>
+            <tr>
+                <td><strong>Category</strong></td>
+                ${selectedProducts.map(p => `<td style="text-transform:capitalize;">${p.category}</td>`).join('')}
+            </tr>
+            <tr>
+                <td><strong>Stock Status</strong></td>
+                ${selectedProducts.map(p => `<td>${p.inStock ? 'In Stock' : '<span style="color:red;">Out of Stock</span>'}</td>`).join('')}
+            </tr>
+            <tr>
+                <td><strong>Actions</strong></td>
+                ${selectedProducts.map(p => `
+                    <td>
+                        <button class="btn-primary" style="padding: 5px 10px; font-size: 0.7rem;" onclick="addToCart(${p.id})">
+                            Add to Cart
+                        </button>
+                    </td>
+                `).join('')}
+            </tr>
+        </tbody>
+    </table>`;
+
+    container.innerHTML = tableHTML;
+    modal.style.display = 'block';
+}
+
+function closeComparison() {
+    document.getElementById('comparisonModal').style.display = 'none';
+}
+       renderProducts();
